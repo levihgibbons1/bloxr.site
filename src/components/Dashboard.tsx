@@ -97,6 +97,7 @@ export default function Dashboard() {
   const [input, setInput] = useState('');
   const [streaming, setStreaming] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [tokenRevealed, setTokenRevealed] = useState(false);
   const [activeProject, setActiveProject] = useState(PROJECTS[0]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -243,31 +244,58 @@ export default function Dashboard() {
 
           {/* Token */}
           <div className="mt-4 pt-4 border-t border-white/[0.06]">
-            <p className="text-[11px] text-white/25 font-semibold uppercase tracking-[0.1em] px-1 mb-2">API Token</p>
-            <div className="bg-black/50 border border-white/[0.06] rounded-lg px-3 py-2 mb-2">
-              <p className="text-[#4F8EF7] text-[11px] font-mono truncate opacity-80">{DEMO_TOKEN}</p>
+            <div className="flex items-center justify-between px-1 mb-2.5">
+              <p className="text-[11px] text-white/25 font-semibold uppercase tracking-[0.1em]">Studio Token</p>
+              <button
+                onClick={() => setTokenRevealed(v => !v)}
+                className="text-white/20 hover:text-white/50 transition-colors"
+              >
+                {tokenRevealed ? (
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 8s2.5-5 6-5 6 5 6 5-2.5 5-6 5-6-5-6-5z" stroke="currentColor" strokeWidth="1.2"/>
+                    <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.2"/>
+                    <path d="M2 2l12 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 8s2.5-5 6-5 6 5 6 5-2.5 5-6 5-6-5-6-5z" stroke="currentColor" strokeWidth="1.2"/>
+                    <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.2"/>
+                  </svg>
+                )}
+              </button>
             </div>
-            <button
-              onClick={copyToken}
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-[12px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.12] transition-all duration-200"
-            >
-              {copied ? (
-                <>
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8L6.5 11.5L13 5" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span className="text-[#10B981]">Copied</span>
-                </>
-              ) : (
-                <>
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                    <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                    <path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                  </svg>
-                  Copy token
-                </>
-              )}
-            </button>
+
+            <div className="rounded-xl border border-white/[0.07] overflow-hidden">
+              <div className="flex items-center gap-2 px-3 py-2.5 bg-black/30">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#4F8EF7]/60 shrink-0" />
+                <span className="flex-1 text-[12px] font-mono text-white/40 truncate">
+                  {tokenRevealed
+                    ? DEMO_TOKEN
+                    : 'bxr_' + '●'.repeat(12) + DEMO_TOKEN.slice(-6)}
+                </span>
+              </div>
+              <button
+                onClick={copyToken}
+                className="w-full flex items-center justify-center gap-2 py-2 text-[12px] bg-white/[0.02] hover:bg-white/[0.05] border-t border-white/[0.06] transition-all duration-200"
+              >
+                {copied ? (
+                  <>
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 8L6.5 11.5L13 5" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span className="text-[#10B981] font-medium">Copied to clipboard</span>
+                  </>
+                ) : (
+                  <>
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                      <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2"/>
+                      <path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round"/>
+                    </svg>
+                    <span className="text-white/30 font-medium">Copy token</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
