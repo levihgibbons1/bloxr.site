@@ -574,11 +574,6 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* Footer hint */}
-            <div className="flex items-center justify-between px-4 pb-2.5">
-              <span className="text-[11px] text-white/15">+ to attach images or files</span>
-              <span className="text-[11px] text-white/15">↵ send · ⇧↵ newline</span>
-            </div>
           </div>
         </div>
       </div>
