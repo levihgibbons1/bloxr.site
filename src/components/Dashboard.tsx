@@ -99,7 +99,9 @@ export default function Dashboard() {
   const [copied, setCopied] = useState(false);
   const [tokenRevealed, setTokenRevealed] = useState(false);
   const [activeProject, setActiveProject] = useState(PROJECTS[0]);
+  const [attachments, setAttachments] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,6 +151,17 @@ export default function Dashboard() {
       e.preventDefault();
       send();
     }
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    const names = files.map(f => f.name);
+    setAttachments(prev => [...prev, ...names]);
+    e.target.value = '';
+  };
+
+  const removeAttachment = (i: number) => {
+    setAttachments(prev => prev.filter((_, idx) => idx !== i));
   };
 
   return (
@@ -479,10 +492,65 @@ export default function Dashboard() {
         {/* Input */}
         <div className="px-6 pb-5 shrink-0">
           <div
-            className="rounded-2xl border border-white/[0.08] focus-within:border-white/[0.14] transition-colors duration-200"
+            className="rounded-2xl border border-white/[0.08] focus-within:border-white/[0.12] transition-colors duration-200"
             style={{ background: '#111' }}
           >
-            <div className="flex items-end gap-3 px-4 pt-3.5 pb-3">
+            {/* Attachment previews */}
+            <AnimatePresence>
+              {attachments.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex flex-wrap gap-2 px-4 pt-3"
+                >
+                  {attachments.map((name, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-[12px] text-white/50 group"
+                    >
+                      <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                        <rect x="2" y="1" width="12" height="14" rx="2" stroke="currentColor" strokeWidth="1.3"/>
+                        <path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                      </svg>
+                      <span className="max-w-[120px] truncate">{name}</span>
+                      <button
+                        onClick={() => removeAttachment(i)}
+                        className="text-white/20 hover:text-white/60 transition-colors ml-0.5"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Text row */}
+            <div className="flex items-end gap-2.5 px-3 pt-3 pb-3">
+              {/* Attach button */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,.png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.lua"
+                multiple
+                className="hidden"
+                onChange={onFileChange}
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.08] hover:border-white/[0.18] hover:bg-white/[0.05] text-white/30 hover:text-white/60 transition-all duration-200"
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </button>
+
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -490,9 +558,11 @@ export default function Dashboard() {
                 onKeyDown={onKeyDown}
                 placeholder="Describe what you want to build..."
                 rows={1}
-                className="flex-1 bg-transparent text-[14px] text-white/90 placeholder:text-white/25 outline-none resize-none leading-relaxed"
+                className="flex-1 bg-transparent text-[14px] text-white/90 placeholder:text-white/25 outline-none resize-none leading-relaxed py-1"
                 style={{ maxHeight: 140 }}
               />
+
+              {/* Send button */}
               <button
                 onClick={() => send()}
                 disabled={!input.trim() || streaming}
@@ -514,18 +584,10 @@ export default function Dashboard() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between px-4 pb-3">
-              <div className="flex items-center gap-3">
-                {connected ? (
-                  <span className="flex items-center gap-1.5 text-[11px] text-[#10B981]/70">
-                    <div className="w-1 h-1 rounded-full bg-[#10B981]" />
-                    Syncing to {activeProject.name}
-                  </span>
-                ) : (
-                  <span className="text-[11px] text-white/20">Connect Studio to push code</span>
-                )}
-              </div>
-              <span className="text-[11px] text-white/15">Enter to send · Shift+Enter for newline</span>
+            {/* Footer hint */}
+            <div className="flex items-center justify-between px-4 pb-2.5">
+              <span className="text-[11px] text-white/15">+ to attach images or files</span>
+              <span className="text-[11px] text-white/15">↵ send · ⇧↵ newline</span>
             </div>
           </div>
         </div>
