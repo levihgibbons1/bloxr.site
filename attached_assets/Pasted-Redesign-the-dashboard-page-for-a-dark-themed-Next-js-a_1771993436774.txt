@@ -1,0 +1,79 @@
+Redesign the /dashboard page for a dark-themed Next.js app called Bloxr (AI Roblox dev tool).
+
+KEEP ALL EXISTING LOGIC — only replace the JSX and styling. Do not touch any useState, useEffect, fetch calls, or handler functions.
+
+---
+
+LAYOUT
+- Full viewport height, no scrolling on the outer container
+- Left sidebar: fixed 260px width, dark border on the right
+- Right: chat area fills all remaining width
+
+---
+
+SIDEBAR (left, 260px)
+- Top: "DASHBOARD" label small uppercase gray, "Hey, [name] 👋" below it larger
+- Thin divider
+- Studio status card:
+  - Small dot (gray = disconnected, green = connected) + "Studio not connected" / "Studio connected" text
+  - Blue "Connect Studio" button full width
+  - Small gray helper text below
+- Studio token card:
+  - "YOUR STUDIO TOKEN" label small uppercase
+  - UUID displayed in a monospace box, truncated, blue color
+  - "Copy Token" button with copy icon, full width, outlined style
+- Background: #0f0f0f, no visible card borders — just spacing
+
+---
+
+CHAT AREA (right, fills remaining width)
+Background: #0a0a0a
+
+EMPTY STATE (shown when no messages):
+- Centered vertically and horizontally
+- Bloxr logo image (src="/logo.png") 48x48, slight opacity
+- Soft animated glow/pulse behind logo
+- "What do you want to build?" — 24px semibold, white/90
+- "Describe a Roblox feature and Bloxr will build and push it to Studio." — 15px, white/40
+- Max width 340px on subtitle
+
+MESSAGES LIST (scrollable, px-8 py-10 gap-6):
+- User bubble: right-aligned, max-w-[60%], white background, black text, 15px, rounded-2xl, px-4 py-2.5
+- AI message: left-aligned, no background, no border, plain white/85 text 15px leading-relaxed, max-w-[640px]. Render markdown: bold, bullet points, line breaks.
+- Status pill: left-aligned, inline-flex, dark gray bg (#1c1c20), rounded-full, px-4 py-2, 14px, green checkmark SVG + "X actions completed" in green
+- "Getting context..." state: just plain white/40 text, no bubble, 14px
+
+INPUT BAR (sticky bottom, full width of chat area):
+- bg-[#111] border border-white/10 rounded-2xl mx-6 mb-4 shadow-lg
+- Inside: textarea (flex-1, bg transparent, 15px, placeholder white/30, no outline, max-h-32, auto-resize) + send button on right
+- Send button: 32x32 rounded-lg, white bg when active, white/10 bg when disabled, arrow-up icon
+- Shift+Enter = newline, Enter = send
+- Disable send while streaming
+
+---
+
+ANIMATIONS
+- Messages fade in with slight upward motion (framer-motion: opacity 0→1, y 6→0, duration 0.18s)
+- Empty state fades in on load
+
+---
+
+COLORS
+- Background: #0a0a0a
+- Sidebar bg: #0f0f0f
+- Input bg: #111
+- AI message bg: none
+- User bubble: white / black text
+- Status pill: #1c1c20
+- Accent/green: #10B981
+- Blue button: #4F8EF7
+- All borders: white/8 to white/10
+
+---
+
+TECH
+- Next.js 14 App Router
+- Tailwind CSS only (no new CSS files)
+- Framer Motion for animations (already installed)
+- TypeScript
+- Keep all existing imports, types, state variables, and functions — only rewrite the return() JSX

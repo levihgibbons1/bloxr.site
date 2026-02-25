@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import Waitlist from './components/Waitlist';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
+import Dashboard from './components/Dashboard';
 
 function LandingPage() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
