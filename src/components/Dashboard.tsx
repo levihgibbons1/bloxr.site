@@ -225,34 +225,24 @@ export default function Dashboard() {
           <div className="mt-5 pt-5 border-t border-white/[0.06]">
             <p className="text-[11px] text-white/25 font-semibold uppercase tracking-[0.1em] px-1 mb-3">Studio</p>
 
-            <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl mb-2 border ${
-              connected ? 'bg-[#10B981]/[0.05] border-[#10B981]/20' : 'bg-white/[0.02] border-white/[0.06]'
-            }`}>
+            <div className="flex items-center gap-2.5 px-1">
               <div className="relative shrink-0">
                 {connected && (
                   <motion.div
                     className="absolute inset-0 rounded-full bg-[#10B981]"
-                    animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
+                    animate={{ scale: [1, 2, 1], opacity: [0.6, 0, 0.6] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
                 )}
                 <div className={`w-2 h-2 rounded-full ${connected ? 'bg-[#10B981]' : 'bg-white/20'}`} />
               </div>
               <span className={`text-[13px] font-medium ${connected ? 'text-[#10B981]' : 'text-white/35'}`}>
-                {connected ? 'Studio connected' : 'Not connected'}
+                {connected ? 'Studio connected' : 'Studio not connected'}
               </span>
             </div>
-
-            <button
-              onClick={() => setConnected(v => !v)}
-              className={`w-full py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
-                connected
-                  ? 'bg-white/[0.06] hover:bg-white/[0.09] text-white/60 hover:text-white/80'
-                  : 'bg-[#4F8EF7] hover:bg-[#3D7BE5] text-white shadow-[0_0_20px_rgba(79,142,247,0.15)]'
-              }`}
-            >
-              {connected ? 'Disconnect' : 'Connect Studio'}
-            </button>
+            <p className="text-[11px] text-white/20 mt-2 px-1 leading-relaxed">
+              Open Roblox Studio and activate the Bloxr plugin to connect.
+            </p>
           </div>
 
           {/* Token */}
